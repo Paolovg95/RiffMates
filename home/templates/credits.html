@@ -1,4 +1,6 @@
-<h1>Credits Web Page</h1>
-<!-- <p>Nicky</p>
-<p>Paolo</p> -->
-{{content}}
+<h1>{% if object.page_name %} {{object.page_name}}{% endif %}</h1>
+
+<ul>
+  <li>{{object.credit_names.0}}</li>
+  <li>{{object.credit_names.1}}</li>
+</ul>
