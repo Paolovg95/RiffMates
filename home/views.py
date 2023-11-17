@@ -7,7 +7,7 @@ from django.http import JsonResponse, HttpResponse
 def view_credits(request):
 
     credit_context = {
-        "credit_names": ['Paolo', 'Nicky'],
+        "credit_names": ['Paolo'],
         "page_name": "Credits page"
     }
     context = {

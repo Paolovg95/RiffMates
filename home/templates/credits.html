@@ -1,6 +1,11 @@
 <h1>{% if object.page_name %} {{object.page_name}}{% endif %}</h1>
 
+
+<h3>You have {{ object.credit_names|length}} author{{ object.credit_names|pluralize }}</h3>
+
 <ul>
-  <li>{{object.credit_names.0}}</li>
-  <li>{{object.credit_names.1}}</li>
-</ul>
+  {% for object in object.credit_names %}
+    <li>{{object}}</li>
+  {% endfor %}
+  </u>
+<a href="{% url 'about' %}">About page</a>
