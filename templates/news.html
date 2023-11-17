@@ -1,0 +1,14 @@
+<h1>RiffMates News</h1>
+
+<p>{{ news|length }} new{{ news|pluralize}}</p>
+<ul>
+  {% for item in news %}
+  <li>{{item}}</li>
+  {% endfor %}
+</u>
+
+<p>Footer</p>
+<ul>
+  <li><a href="{% url 'credits' %}">Credits</a></li>
+  <li><a href="{% url 'about' %}">About</a></li>
+</ul>

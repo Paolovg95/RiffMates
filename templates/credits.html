@@ -1,0 +1,15 @@
+<h1>{% if object.page_name %} {{object.page_name}}{% endif %}</h1>
+
+
+<h3>This website has {{ object.credit_names|length}} author{{ object.credit_names|pluralize }}</h3>
+
+<ul>
+  {% for object in object.credit_names %}
+    <li>{{object}}</li>
+  {% endfor %}
+</u>
+<p>Footer</p>
+<ul>
+  <li><a href="{% url 'about' %}">About</a></li>
+  <li><a href="{% url 'news' %}">News</a></li>
+</ul>

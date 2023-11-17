@@ -7,8 +7,8 @@ from django.http import JsonResponse, HttpResponse
 def view_credits(request):
 
     credit_context = {
-        "credit_names": ['Paolo'],
-        "page_name": "Credits page"
+        "credit_names": ['Chritopher', 'Lane', 'Paolo'],
+        "page_name": "Credits"
     }
     context = {
         "object": credit_context
@@ -27,3 +27,12 @@ def view_version(request):
     code = HttpResponse.status_code
     data = { "Version": "1.0.0","code": code}
     return JsonResponse(data)
+
+def view_news(request):
+    data = {
+        'news':[
+            "RiffMates now has a news page!",
+            "RiffMates has its first web page",
+        ],
+    }
+    return render(request, "news.html", data)

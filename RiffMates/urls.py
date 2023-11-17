@@ -21,5 +21,6 @@ from home import views as home_views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('credits/', home_views.view_credits, name="credits"),
-    path('about/', home_views.view_about, name='about')
+    path('about/', home_views.view_about, name='about'),
+    path('news/', home_views.view_news, name="news")
 ]
