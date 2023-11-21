@@ -5,29 +5,23 @@
 {% endblock title %}
 
 {% block content %}
-  <p>{{ news|length }} new{{ news|pluralize}}</p>
-  <ul>
-    {% for item in news %}
-      <li>{{item}}</li>
-    {% endfor %}
-  </u>
-  <table class="table table-dark table-striped table-hover width-100">
+  <h1>News</h1>
+  <table class="table table-dark table-striped table-hover">
     <thead>
       <tr>
-        <th scope="col">#</th>
         <th scope="col">Subject</th>
-        <th scope="col">Date</th>
+        <th scope="col">Date published</th>
       </tr>
     </thead>
     <tbody>
-      {% for item in news %}
-        <tr>
-          <th scope="row">{{ forloop.counter }}</th>
-          <td>{{item}}</td>
-          <td>{{item|date:"D d M Y" }}</td>
-        </tr>
-      {% endfor %}
+          <tr class="{% cycle news.0 news.1 as news_subject %}">
+            <th>{{ news_subject.0}}</th>
+            <th>{{ news_subject.1|date:"F tS, l o"}}</th>
+          </tr>
+          <tr class="{% cycle news_subject %}">
+            <th>{{ news_subject.0}}</th>
+            <th>{{ news_subject.1|date:"F tS, l o"}}</th>
+          </tr>
     </tbody>
   </table>
-
 {% endblock content %}
