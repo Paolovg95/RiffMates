@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.http import JsonResponse, HttpResponse
+from datetime import datetime
 
 # Create your views here.
 
@@ -29,10 +30,11 @@ def view_version(request):
     return JsonResponse(data)
 
 def view_news(request):
+    current_dateTime = datetime.now()
     data = {
         'news':[
-            "RiffMates now has a news page!",
-            "RiffMates has its first web page",
+            ("RiffMates now has a news page!",current_dateTime),
+            ("RiffMates has its first web page", current_dateTime),
         ],
     }
     return render(request, "news.html", data)
