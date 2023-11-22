@@ -14,14 +14,12 @@
       </tr>
     </thead>
     <tbody>
-          <tr class="{% cycle news.0 news.1 as news_subject %}">
-            <th>{{ news_subject.0}}</th>
-            <th>{{ news_subject.1|date:"F tS, l o"}}</th>
+        {% for item in news %}
+          <tr class="{% cycle 'news_1' 'news_2' %}">
+            <th>{{ item.0}}</th>
+            <th>{{ item.1|date:"F tS, l o"}}</th>
           </tr>
-          <tr class="{% cycle news_subject %}">
-            <th>{{ news_subject.0}}</th>
-            <th>{{ news_subject.1|date:"F tS, l o"}}</th>
-          </tr>
+        {% endfor %}
     </tbody>
   </table>
 {% endblock content %}
