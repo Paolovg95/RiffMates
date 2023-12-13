@@ -1,15 +1,15 @@
 {% extends 'base.html' %}
 
 {% block title %}
-  {{block.super}}: Credits
+  {{block.super}}: {{ page_name }}
 {% endblock title %}
 
 {% block content %}
-  <h3>This website has {{ object.credit_names|length}} author{{ object.credit_names|pluralize }}</h3>
+  <h3>This website has {{ credit_names|length}} author{{ credit_names|pluralize }}</h3>
 
   <ul>
-    {% for object in object.credit_names %}
-      <li>{{object}}</li>
+    {% for name in credit_names %}
+      <li>{{name}}</li>
     {% endfor %}
   </u>
   {% endblock content %}

@@ -11,11 +11,11 @@ def view_credits(request):
         "credit_names": ['Chritopher', 'Lane', 'Paolo'],
         "page_name": "Credits"
     }
-    context = {
-        "object": credit_context
-    }
+    # context = {
+    #     "object": credit_context
+    # }
 
-    return render(request, "credits.html", context)
+    return render(request, "credits.html", credit_context)
 
 # Render Http Response
 def view_about(request):
