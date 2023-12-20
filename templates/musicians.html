@@ -6,6 +6,7 @@
 {% endblock %}
 
 {% block content %}
+<h1>Musicians List</h1>
 {% for musician in musicians %}
   <ul>
     <li>
@@ -13,4 +14,14 @@
     </li>
   </ul>
 {% endfor %}
+
+{% if page.has_other_pages %}
+  {% if page.has_previous %}
+    <a href="{% url 'musicians' %}?page={{page.previous_page_number}}">Prev</a> &nbsp;&nbsp;&nbsp;
+  {% endif %}
+  {% if page.has_next %}
+    <a href="{% url 'musicians' %}?page={{page.next_page_number}}">Next</a>
+  {% endif %}
+{% endif %}
+
 {% endblock content %}
