@@ -9,5 +9,5 @@
 <h1>{{musician.first_name}} {{musician.last_name}}</h1>
 
 <p> Was born {{musician.birth_date}}. </p>
-<a href="{% url 'musicians' %}">Go back to listing</a>
+<button type="button" onClick="javascript:history.go(-1)" class="btn btn-link">Go back</button>
 {% endblock content %}

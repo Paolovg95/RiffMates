@@ -13,7 +13,7 @@ def get_musicians(request):
     musicians = Musician.objects.all().order_by("last_name")
     paginator = Paginator(musicians, 3)
     # Fetch the page key from the GET dictionary, defaulting to 1 if the key does not exist
-    page_num = request.GET.get('page')
+    page_num = request.GET.get('page', 1)
     page_num  = int(page_num) # URLs are text, convert any value to an integer
 
     if page_num < 1: # Min value for 'page' = 1
