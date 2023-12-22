@@ -6,8 +6,22 @@
 {% endblock %}
 
 {% block content %}
-<h1>{{musician.first_name}} {{musician.last_name}}</h1>
-
-<p> Was born {{musician.birth_date}}. </p>
+<div class="card" style="width: 18rem;">
+  <!-- <img class="card-img-top" src="..." alt="Card image cap"> -->
+  <div class="card-body">
+    <h5 class="card-title font-weight-bold">{{musician.first_name}} {{musician.last_name}}</h5>
+  </div>
+  <ul class="list-group list-group-flush">
+    <li class="list-group-item font-weight-bold">Born:
+      <span class="font-weight-light">{{musician.birth_date}}</span>
+    </li>
+    <li class="list-group-item font-weight-bold">Bands:</li>
+  </ul>
+  <div class="card-body">
+    {% for band in bands %}
+      <a href="{% url 'band' band.name %}" class="card-link">{{ band.name }}</a>
+    {% endfor %}
+  </div>
+</div>
 <button type="button" onClick="javascript:history.go(-1)" class="btn btn-link">Go back</button>
 {% endblock content %}

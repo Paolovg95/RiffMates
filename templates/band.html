@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block title %}
+{{block.super}}: Band Details
+{% endblock %}
+
+{% block content %}
+
+<h1>{{ band.name }}</h1>
+<h3>Band members</h3>
+<ul>
+  {% for musician in musicians %}
+    <li>{{ musician.first_name}} {{ musician.last_name }}</li>
+  {% endfor %}
+</ul>
+{% endblock content %}

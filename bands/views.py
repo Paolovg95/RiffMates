@@ -1,14 +1,16 @@
 from django.shortcuts import render, get_object_or_404
-from bands.models import Musician
+from bands.models import Musician, Band
 from django.core.paginator import Paginator
 # Create your views here.
 
 def get_musician(request, musician_id):
     musician = get_object_or_404(Musician, id=musician_id )
     data = {
-        'musician': musician
+        'musician': musician,
+        'bands': musician.band_set.all()
     }
     return render(request, "musician.html", data)
+
 def get_musicians(request):
     musicians = Musician.objects.all().order_by("last_name")
     paginator = Paginator(musicians, 3)
@@ -28,3 +30,11 @@ def get_musicians(request):
         'page': page
     }
     return render(request, "musicians.html", data)
+
+def get_band(request, band_name):
+    band = Band.objects.get(name=band_name)
+    data = {
+        'band': band,
+        'musicians': band.musicians.all()
+    }
+    return render(request, 'band.html', data)
