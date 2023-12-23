@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404
-from bands.models import Musician, Band
+from bands.models import Musician, Band, Venue
 from django.core.paginator import Paginator
 # Create your views here.
 
@@ -38,3 +38,9 @@ def get_band(request, band_name):
         'musicians': band.musicians.all()
     }
     return render(request, 'band.html', data)
+def get_venues(request):
+    venues = Venue.objects.all().order_by("name")
+    data = {
+        'venues': venues
+    }
+    return render(request, "venues.html", data)

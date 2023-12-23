@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block title %}
+{{block.super}}: Venues
+{% endblock title %}
+
+{% block content %}
+  <h1>Venues and Rooms</h1>
+  {% for venue in venues %}
+    <h3>{{ venue.name }}</h3>
+    <ul>
+      {% for room in venue.room_set.all %}
+        <li>
+          {{ room.room_name }}
+        </li>
+      {% endfor %}
+    </ul>
+  {% endfor %}
+{% endblock content %}

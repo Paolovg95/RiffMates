@@ -4,12 +4,13 @@
 {% block title %}
 {{block.super}}: All Musicians
 {% endblock %}
+
 {% block content %}
-<h1>Musicians List</h1>
-<div class="row m-4">
+<div class="p-4">
+  <h1>Musicians List</h1>
   <ul>
       {% for musician in musicians %}
-        <div class="m-4">
+        <div class="mt-4">
           <li>
             <a href="{% url 'musician' musician.id %}">{{ musician.first_name }} {{ musician.last_name }}</a>
           </li>
@@ -18,7 +19,7 @@
   </ul>
 </div>
 
-<div class="m-4 position-relative">
+<div class="m-4">
   <nav>
     <ul class="pagination">
       {% if page.has_other_pages %}
