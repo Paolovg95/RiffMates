@@ -5,15 +5,17 @@
 {% endblock title %}
 
 {% block content %}
-  <h1>Venues and Rooms</h1>
-  {% for venue in venues %}
-    <h3>{{ venue.name }}</h3>
-    <ul>
-      {% for room in venue.room_set.all %}
-        <li>
-          {{ room.room_name }}
-        </li>
-      {% endfor %}
-    </ul>
-  {% endfor %}
+  <div class="m-3">
+    <h1>Venues and Rooms</h1>
+    {% for venue in venues %}
+      <h3>{{ venue.name }}</h3>
+      <ol>
+        {% for room in venue.room_set.all %}
+          <li>
+            {{ room.room_name }}
+          </li>
+        {% endfor %}
+      </ol>
+    {% endfor %}
+  </div>
 {% endblock content %}

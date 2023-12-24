@@ -38,6 +38,13 @@ def get_band(request, band_name):
         'musicians': band.musicians.all()
     }
     return render(request, 'band.html', data)
+def get_bands(request):
+    bands = Band.objects.all()
+    data = {
+        'bands': bands
+    }
+    return render(request, "bands.html", data)
+
 def get_venues(request):
     venues = Venue.objects.all().order_by("name")
     data = {
