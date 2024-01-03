@@ -3,8 +3,13 @@ from bands.models import Musician, Venue, Room, Band
 # Register your models here.
 admin.site.register(Room)
 admin.site.register(Venue)
-admin.site.register(Band)
 
-@admin.register(Musician)
 class MusicianAdmin(admin.ModelAdmin):
     list_display = ('id', 'first_name','last_name')
+    search_fields = ('first_name', 'last_name',)
+admin.site.register(Musician, MusicianAdmin)
+
+class BandAdmin(admin.ModelAdmin):
+    list_display = ('name',)
+    search_fields = ('name',)
+admin.site.register(Band,BandAdmin)
