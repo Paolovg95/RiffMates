@@ -31,8 +31,8 @@ def get_musicians(request):
     }
     return render(request, "musicians.html", data)
 
-def get_band(request, band_name):
-    band = Band.objects.get(name=band_name)
+def get_band(request, band_id):
+    band = Band.objects.get(id=band_id)
     data = {
         'band': band,
         'musicians': band.musicians.all()

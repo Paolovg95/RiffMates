@@ -19,7 +19,7 @@
   </ul>
   <div class="card-body">
     {% for band in bands %}
-      <a href="{% url 'band' band.name %}" class="card-link">{{ band.name }}</a>
+      <a href="{% url 'band' band.id %}" class="card-link">{{ band.name }}</a>
     {% endfor %}
   </div>
 </div>
