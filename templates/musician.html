@@ -18,6 +18,7 @@
     <li class="list-group-item font-weight-bold">Bands:</li>
   </ul>
   <div class="card-body">
+    <p>This musician has {{ bands|length }} band{{ bands|pluralize }}</p>
     {% for band in bands %}
       <a href="{% url 'band' band.id %}" class="card-link">{{ band.name }}</a>
     {% endfor %}
