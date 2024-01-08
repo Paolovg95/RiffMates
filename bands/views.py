@@ -23,11 +23,20 @@ def get_musicians(request):
     elif page_num > paginator.num_pages:
         page_num = paginator.num_pages
 
-    page = paginator.page(page_num) # Fetch the page object containing the subset of items
+    page = paginator.page(page_num) # Returns a Page object with the given page_num based index
+
+
+    ## sorted musicians by how many bands they have
+    musicians_bands = {}
+    for musician in musicians:
+        musicians_bands[musician.first_name + " " + musician.last_name] = len(musician.band_set.all())
+
+    sorted_musicians_bands = sorted(musicians_bands.items(), key=lambda x:x[1], reverse=True)
 
     data = {
         'musicians': page.object_list, # list of objects in as 'musicians'
-        'page': page
+        'page': page, # page object,
+        'musicians_bands': sorted_musicians_bands
     }
     return render(request, "musicians.html", data)
 

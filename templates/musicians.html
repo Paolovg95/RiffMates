@@ -49,5 +49,12 @@
     </ul>
   </nav>
 </div>
+<p>Sorted by number of bands</p>
+<ul>
+  {% for musician_band in musicians_bands %}
+    <li>{{musician_band.0 }}: {{ musician_band.1 }}</li>
+  {% endfor %}
+</ul>
+
 
 {% endblock content %}

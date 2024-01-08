@@ -8,7 +8,7 @@ from datetime import datetime
 def view_credits(request):
 
     credit_context = {
-        "credit_names": ['Chritopher', 'Lane', 'Paolo'],
+        "credit_names": ['Christopher', 'Lane', 'Paolo'],
         "page_name": "Credits"
     }
     # context = {
