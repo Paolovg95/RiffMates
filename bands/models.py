@@ -1,6 +1,7 @@
 from django.db import models
-
+from django.contrib.auth.models import User
 # Create your models here.
+
 class Musician(models.Model):
     first_name = models.CharField(max_length=30)
     last_name = models.CharField(max_length=30)
@@ -26,3 +27,10 @@ class Room(models.Model):
 
     def __str__(self):
         return f"Room={self.id}, Name={self.room_name},Venue={self.venue.name}"
+
+class UserProfile(models.Model):
+    # Create a one-to-one relationship between the UserProfile and the User
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    musician_profiles = models.ManyToManyField(Musician, blank=True)
+    venues_profiles = models.ManyToManyField(Venue, blank=True)
+    # relationships between this user account and any Musician or Venue objects.
