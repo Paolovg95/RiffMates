@@ -32,5 +32,5 @@ class UserProfile(models.Model):
     # Create a one-to-one relationship between the UserProfile and the User
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     musician_profiles = models.ManyToManyField(Musician, blank=True)
-    venues_profiles = models.ManyToManyField(Venue, blank=True)
+    venue_profiles = models.ManyToManyField(Venue, blank=True)
     # relationships between this user account and any Musician or Venue objects.

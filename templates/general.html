@@ -1,0 +1,11 @@
+<!-- RiffMates/templates/general.html -->
+<!-- |safe allows you to write HTML content into the page -->
+{% extends "base.html" %}
+
+{% block title %}
+{{block.super}}: {{title}}
+{% endblock %}
+
+{% block content %}
+{{content|safe}}
+{% endblock content %}
