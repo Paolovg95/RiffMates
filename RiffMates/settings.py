@@ -127,3 +127,4 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # Account Management
 LOGIN_REDIRECT_URL = '/bands/'
 LOGOUT_REDIRECT_URL = '/bands/'
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
