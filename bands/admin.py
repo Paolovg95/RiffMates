@@ -28,3 +28,5 @@ class UserAdmin(admin.ModelAdmin): # Create a new object to admin the User model
 
 admin.site.unregister(User)
 admin.site.register(User, UserAdmin)
+
+admin.site.register(UserProfile)

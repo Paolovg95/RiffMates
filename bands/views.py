@@ -66,6 +66,7 @@ def get_venues(request):
     }
     return render(request, "venues.html", data)
 
+# The musician_restricted view takes a Musician object ID as a parameter and checks if the authenticated user is either that musician or one of their bandmates.
 @login_required
 def musician_restricted(request, musician_id):
     musician = Musician.objects.get(id=musician_id)
@@ -73,6 +74,7 @@ def musician_restricted(request, musician_id):
     user_profile = request.user.userprofile
     allowed = False # True if Auth succeeds
 
+    # Check
     if user_profile.musician_profiles.filter(id=musician_id).exists():
         allowed = True
         print(allowed)
@@ -101,10 +103,10 @@ def musician_restricted(request, musician_id):
 # Register this function to be called when a User object emits the post_save signal
 @receiver(post_save, sender=User)
 def user_post_save(sender, **kwargs):
-    # Only take action if the User object is new and not created by a fixture
+    # Only take action if the User object is new and not created by a fixture, raw is True if the save is from a fixture being loaded
 
     if kwargs['created'] and not kwargs['raw']:
-        user = kwargs['instance']
+        user = kwargs['instance'] # Instance contains the object created
         try:
             # Double check UserProfile doesn't exist already
             # (admin might create it before the signal fires)
