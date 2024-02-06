@@ -3,8 +3,9 @@ from bands.models import Musician, Band, Venue, UserProfile
 from django.contrib.auth.models import User
 from django.core.paginator import Paginator
 from django.http import Http404
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, user_passes_test
 from django.db.models.signals import post_save
+from django.contrib.auth.signals import user_login_failed
 from django.dispatch import receiver
 # Create your views here.
 
@@ -67,6 +68,28 @@ def get_venues(request):
     return render(request, "venues.html", data)
 
 # The musician_restricted view takes a Musician object ID as a parameter and checks if the authenticated user is either that musician or one of their bandmates.
+def venues_restricted(user):
+    user = user.userprofile
+    return user.venue_profiles.all().exists()
+
+
+@user_passes_test(venues_restricted, login_url="/restricted/")
+def venues_restricted(request):
+    user_profile = request.user.userprofile
+    venues = user_profile.venue_profiles.all()
+    content = f"""
+        <h1>Venues associated: {venues.first()}</h1>
+
+        <p> <a href="/accounts/logout/">Logout</a> </p>
+    """
+    context = {
+        'venues': venues,
+        'content': content,
+    }
+    return render(request, "general.html", context)
+
+
+
 @login_required
 def musician_restricted(request, musician_id):
     musician = Musician.objects.get(id=musician_id)
@@ -114,3 +137,6 @@ def user_post_save(sender, **kwargs):
         except UserProfile.DoesNotExist:
             # No UserProfile exists for this user, create one
             UserProfile.objects.create(user=user)
+
+# @receiver(user_login_failed,sender=User)
+# def user_login_failed_view(sender, **kwargs):

@@ -25,6 +25,7 @@ urlpatterns = [
     path('credits/', home_views.view_credits, name="credits"),
     path('about/', home_views.view_about, name='about'),
     path('news/', home_views.view_news, name="news"),
+    path('restricted/', home_views.venue_restricted, name="restricted"),
     path('venues/', get_venues, name="venues"),
     path('accounts/', include('django.contrib.auth.urls'))
 ]

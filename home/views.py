@@ -38,3 +38,13 @@ def view_news(request):
         ],
     }
     return render(request, "news.html", data)
+def venue_restricted(request):
+    content = f"""
+            <h1>No venuew associated</h1>
+
+            <p>Move on</p>
+        """
+    data = {
+        'content': content
+    }
+    return render(request, "general.html", data)
