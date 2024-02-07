@@ -73,7 +73,7 @@ def venues_restricted(user):
         user = user.userprofile
         return user.venue_profiles.all().exists
     except:
-        redirect("/restricted/")
+        redirect("/restricted/") # If user.userprofile not exists = Not logged in
 
 @user_passes_test(venues_restricted, login_url="/restricted/")
 def venues_restricted(request):
