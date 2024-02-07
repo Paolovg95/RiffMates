@@ -1,4 +1,4 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from bands.models import Musician, Band, Venue, UserProfile
 from django.contrib.auth.models import User
 from django.core.paginator import Paginator
@@ -69,16 +69,20 @@ def get_venues(request):
 
 # The musician_restricted view takes a Musician object ID as a parameter and checks if the authenticated user is either that musician or one of their bandmates.
 def venues_restricted(user):
-    user = user.userprofile
-    return user.venue_profiles.all().exists()
-
+    try:
+        user = user.userprofile
+        return user.venue_profiles.all().exists
+    except:
+        redirect("/restricted/")
 
 @user_passes_test(venues_restricted, login_url="/restricted/")
 def venues_restricted(request):
     user_profile = request.user.userprofile
     venues = user_profile.venue_profiles.all()
     content = f"""
-        <h1>Venues associated: {venues.first()}</h1>
+        <h1>Venues associated:
+            <br>{venues.first()}
+        </h1>
 
         <p> <a href="/accounts/logout/">Logout</a> </p>
     """

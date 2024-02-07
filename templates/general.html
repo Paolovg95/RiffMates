@@ -7,5 +7,10 @@
 {% endblock %}
 
 {% block content %}
-{{content|safe}}
+
+{% if request.user.is_authenticated %}
+  {{content|safe}}
+{% else %}
+  {{login_content|safe}}
+{% endif %}
 {% endblock content %}
