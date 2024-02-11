@@ -79,13 +79,20 @@ def venues_restricted(user):
 def venues_restricted(request):
     user_profile = request.user.userprofile
     venues = user_profile.venue_profiles.all()
-    content = f"""
-        <h1>Venues associated:
-            <br>{venues.first()}
-        </h1>
+    if venues:
+        content = f"""
+            <h1>Venues associated:
+                <br>{venues.first()}
+            </h1>
 
-        <p> <a href="/accounts/logout/">Logout</a> </p>
-    """
+            <p> <a href="/accounts/logout/">Logout</a> </p>
+        """
+    else:
+        content = f"""
+            <h1>No venues associated</h1>
+
+            <p>Move on</p>
+        """
     context = {
         'venues': venues,
         'content': content,
