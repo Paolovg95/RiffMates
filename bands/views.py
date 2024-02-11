@@ -111,22 +111,27 @@ def musician_restricted(request, musician_id):
     # Check
     if user_profile.musician_profiles.filter(id=musician_id).exists():
         allowed = True
-        print(allowed)
+        content = f"""
+            <h1>Your musician profile: {musician.first_name} {musician.last_name}</h1>
+
+            <p> <a href="/accounts/logout/">Logout</a> </p>
+        """
     else:
         musician_profiles = set(user_profile.musician_profiles.all())
         for band in musician.band_set.all():
             band_musicians = set(band.musicians.all())
             if musician_profiles.intersection(band_musicians):
                 allowed = True
-                break
+                content = f"""
+                    <h1>Band member profile: {musician.first_name} {musician.last_name}</h1>
+                    <h2>From {band.name}</h2>
+
+                    <p> <a href="/accounts/logout/">Logout</a> </p>
+                """
+            break
     # If User is not this musician, check if they're a band-mate
     if not allowed:
         raise Http404("Musician profile not found")
-    content = f"""
-        <h1>Musician Page: {musician.last_name}</h1>
-
-        <p> <a href="/accounts/logout/">Logout</a> </p>
-    """
     data = {
         'title': 'Musician Restricted',
         'content': content,
