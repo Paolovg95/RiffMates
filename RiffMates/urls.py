@@ -21,6 +21,7 @@ from bands.views import get_venues
 
 urlpatterns = [
     path('bands/',include("bands.urls")),
+    path('content/',include("content.urls")),
     path('admin/', admin.site.urls),
     path('credits/', home_views.view_credits, name="credits"),
     path('about/', home_views.view_about, name='about'),
