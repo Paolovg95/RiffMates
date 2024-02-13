@@ -1,6 +1,8 @@
 from django.shortcuts import render, redirect
 from .forms import CommentForm
+from content.forms import CommentForm, SeekingAdForm
 from django.core.mail import send_mail
+from .models import SeekingAd, SeekingChoice
 
 def comment_accepted(request):
     data = {
@@ -33,12 +35,18 @@ def comment(request):
                 "admin@example.com", ["admin@example.com"],
                 fail_silently=False)
             return redirect("/content/comment_accepted/")
-
-
-
     # Was a GET, or Form was not valid
     data = {
         "form": form,
     }
-
     return render(request, "comment.html", data)
+# RiffMates/content/views.py
+
+def list_ads(request):
+    data = {
+        'seeking_musician':SeekingAd.objects.filter(
+            seeking=SeekingChoice.MUSICIAN),
+        'seeking_band':SeekingAd.objects.filter(
+            seeking=SeekingChoice.BAND),
+    }
+    return render(request, "list_ads.html", data)
