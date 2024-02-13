@@ -3,6 +3,7 @@ from .forms import CommentForm
 from content.forms import CommentForm, SeekingAdForm
 from django.core.mail import send_mail
 from .models import SeekingAd, SeekingChoice
+from django.contrib.auth.decorators import login_required
 
 def comment_accepted(request):
     data = {
@@ -34,7 +35,7 @@ def comment(request):
             send_mail("Received comment", message,
                 "admin@example.com", ["admin@example.com"],
                 fail_silently=False)
-            return redirect("/content/comment_accepted/")
+            return redirect("comment_accepted")
     # Was a GET, or Form was not valid
     data = {
         "form": form,
@@ -50,3 +51,26 @@ def list_ads(request):
             seeking=SeekingChoice.BAND),
     }
     return render(request, "list_ads.html", data)
+
+
+
+@login_required
+def seeking_ad(request):
+    if request.method == 'GET':
+        form = SeekingAdForm()
+
+    else: # POST
+        form = SeekingAdForm(request.POST)
+        if form.is_valid():
+            ad = form.save(commit=False)
+            ad.owner = request.user
+            ad.save()
+
+            return redirect("ads")
+
+    # Was a GET, or Form was not valid
+    data = {
+        "form": form,
+    }
+
+    return render(request, "seeking_ad.html", data)
