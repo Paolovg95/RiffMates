@@ -11,6 +11,9 @@
     <strong>{{ad.musician.first_name}} {{ad.musician.last_name}}</strong>
     <br />
     <i>{{ad.content}}</i>
+    {% if ad.owner == request.user %}
+    <a href="{% url 'edit_ad' ad.id %}">Edit</a>
+    {% endif %}
   </p>
   {% empty %}
   <p> <i>No ads at this time</i> </p>
@@ -23,6 +26,9 @@
     {{ad.date}} &mdash; <strong>{{ad.band.name}}</strong>
     <br />
     <i>{{ad.content}}</i>
+    {% if ad.owner == request.user %}
+    <a href="{% url 'edit_ad' ad.id %}">Edit</a>
+    {% endif %}
   </p>
   {% empty %}
   <p> <i>No ads at this time</i> </p>

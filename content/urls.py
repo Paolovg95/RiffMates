@@ -5,5 +5,6 @@ urlpatterns = [
     path('comment/', views.comment, name="comment"),
     path('comment_accepted/', views.comment_accepted, name="comment_accepted"),
     path('ads/', views.list_ads, name="ads"),
-    path('ads/new/', views.seeking_ad, name="seeking_ad")
+    path('ads/new/', views.seeking_ad, name="seeking_ad"),
+    path('ads/edit/<int:ad_id>/', views.seeking_ad, name="edit_ad")
 ]

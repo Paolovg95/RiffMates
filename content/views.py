@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from .forms import CommentForm
 from content.forms import CommentForm, SeekingAdForm
 from django.core.mail import send_mail
@@ -55,18 +55,31 @@ def list_ads(request):
 
 
 @login_required
-def seeking_ad(request):
+def seeking_ad(request, ad_id=0):
     if request.method == 'GET':
-        form = SeekingAdForm()
-
+        if ad_id == 0:
+            form = SeekingAdForm()
+        else:
+            ad_instance = get_object_or_404(SeekingAd, id=ad_id)
+            form = SeekingAdForm(instance=ad_instance)
     else: # POST
-        form = SeekingAdForm(request.POST)
-        if form.is_valid():
-            ad = form.save(commit=False)
-            ad.owner = request.user
-            ad.save()
+        # Ad ID of 0 means the form is created based solely on the submitted data
+        if ad_id == 0:
+            form = SeekingAdForm(request.POST)
+            if form.is_valid():
+                ad = form.save(commit=False)
+                ad.owner = request.user
+                ad.save()
+                return redirect("ads")
+        else:
+            ad_instance = get_object_or_404(SeekingAd, id=ad_id, owner=request.user)
+            form = SeekingAdForm(request.POST, instance=ad_instance)
+            if form.is_valid():
+                ad = form.save(commit=False)
+                ad.owner = request.user
+                ad.save()
+                return redirect("ads")
 
-            return redirect("ads")
 
     # Was a GET, or Form was not valid
     data = {
