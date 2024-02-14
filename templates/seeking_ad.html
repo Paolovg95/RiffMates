@@ -3,10 +3,15 @@
 {% block content %}
 <h1>Seeking Ad</h1>
 
-<form method="post">
+<form class="col-lg-6 offset-lg-3" method="post">
   {% csrf_token %}
-  {{form.as_p}}
-  <button class="btn btn-dark" type="submit">Save</button>
+  {% for field in form %}
+  <div class="col-md-6 m-4">
+    <div class="row justify-content-center">
+      {{ field }}
+    </div>
+  </div>
+  {% endfor %}
+  <button class="btn btn-dark" type="submit">Send</button>
 </form>
-
 {% endblock content %}

@@ -9,12 +9,12 @@ class SeekingChoice(models.TextChoices):
     BAND = "B"
 
 class SeekingAd(models.Model):
-    musician = models.ForeignKey(Musician, on_delete=models.SET_NULL, blank=True, null=True)
+    musician = models.ForeignKey(Musician, on_delete=models.SET_NULL, blank=True, null=True, help_text="Fill in if you are a musician seeking a band")
     # on_delete=models.SET_NULL means if the owner of an existing object got deleted set this field for existing object to null.
-    band = models.ForeignKey(Band, on_delete=models.SET_NULL, blank=True, null=True)
+    band = models.ForeignKey(Band, on_delete=models.SET_NULL, blank=True, null=True, help_text="Fill in if you are a band seeking a musician")
     owner = models.ForeignKey(User, on_delete=models.CASCADE)
     # a CharField using the choices argument so seeking can only contain "M" or "B" indicating whether a musician or band is being sought
-    seeking = models.CharField(max_length=1, choices=SeekingChoice.choices)
+    seeking = models.CharField(max_length=1, choices=SeekingChoice.choices, help_text="I'm seeking a..")
     content = models.TextField()
     # auto_now=True means this field gets automatically populated with the current date when the object gets created
     date = models.DateTimeField(auto_now=True)
