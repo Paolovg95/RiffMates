@@ -66,24 +66,21 @@ def seeking_ad(request, ad_id=0):
         # Ad ID of 0 means the form is created based solely on the submitted data
         if ad_id == 0:
             form = SeekingAdForm(request.POST)
-            if form.is_valid():
-                ad = form.save(commit=False)
-                ad.owner = request.user
-                ad.save()
-                return redirect("ads")
+            validate_ad_form(request, form)
+            return redirect("ads")
         else:
             ad_instance = get_object_or_404(SeekingAd, id=ad_id, owner=request.user)
             form = SeekingAdForm(request.POST, instance=ad_instance)
-            if form.is_valid():
-                ad = form.save(commit=False)
-                ad.owner = request.user
-                ad.save()
-                return redirect("ads")
-
-
+            validate_ad_form(request, form)
+            return redirect("ads")
     # Was a GET, or Form was not valid
     data = {
         "form": form,
     }
-
     return render(request, "seeking_ad.html", data)
+
+def validate_ad_form(request, form):
+    if form.is_valid():
+        ad = form.save(commit=False)
+        ad.owner = request.user
+        ad.save()

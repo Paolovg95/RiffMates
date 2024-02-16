@@ -5,6 +5,8 @@ from datetime import datetime
 # Create your views here.
 
 # Render template w/ context via template
+def home(request):
+    return render(request, "base.html", {})
 def view_credits(request):
 
     credit_context = {

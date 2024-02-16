@@ -89,7 +89,7 @@ def venues_restricted(request):
         """
     else:
         content = f"""
-            <h1>No venues associated</h1>
+            <h1>No venues associated to your profile</h1>
 
             <p>Move on</p>
         """

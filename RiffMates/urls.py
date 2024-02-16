@@ -20,6 +20,7 @@ from home import views as home_views
 from bands.views import get_venues
 
 urlpatterns = [
+    path('', home_views.home, name="home"),
     path('bands/',include("bands.urls")),
     path('content/',include("content.urls")),
     path('admin/', admin.site.urls),
