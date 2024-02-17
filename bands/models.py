@@ -17,6 +17,8 @@ class Band(models.Model):
 
 class Venue(models.Model):
     name = models.CharField(max_length=20)
+    description = models.TextField(blank=True)
+    picture = models.ImageField(blank=True, null=True)
 
     def __str__(self):
         return f"Venue={self.id}, Name={self.name}"

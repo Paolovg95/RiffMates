@@ -23,22 +23,16 @@ def get_musicians(request):
     # Fetch the page key from the GET dictionary, defaulting to 1 if the key does not exist
     page_num = request.GET.get('page', 1)
     page_num  = int(page_num) # URLs are text, convert any value to an integer
-
     if page_num < 1: # Min value for 'page' = 1
         page_num = 1
     elif page_num > paginator.num_pages:
         page_num = paginator.num_pages
-
     page = paginator.page(page_num) # Returns a Page object with the given page_num based index
-
-
     musicians_bands = {}
     for musician in musicians:
         musicians_bands[musician.first_name + " " + musician.last_name] = len(musician.band_set.all())
-
     # Sort musicians in ascending order, result is a List of Tuples
     sorted_musicians_bands = sorted(musicians_bands.items(), key=lambda x:x[1], reverse=True)
-
     data = {
         'musicians': page.object_list, # list of objects in as 'musicians'
         'page': page, # page object,
@@ -53,6 +47,7 @@ def get_band(request, band_id):
         'musicians': band.musicians.all()
     }
     return render(request, 'band.html', data)
+
 def get_bands(request):
     bands = Band.objects.all()
     data = {
@@ -74,7 +69,6 @@ def venues_restricted(user):
         return user.venue_profiles.all().exists
     except:
         redirect("/restricted/") # If user.userprofile not exists = Not logged in
-
 @user_passes_test(venues_restricted, login_url="/restricted/")
 def venues_restricted(request):
     user_profile = request.user.userprofile
@@ -98,8 +92,6 @@ def venues_restricted(request):
         'content': content,
     }
     return render(request, "general.html", context)
-
-
 
 @login_required
 def musician_restricted(request, musician_id):

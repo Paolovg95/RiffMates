@@ -38,3 +38,4 @@ urlpatterns = [
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL,
         document_root=settings.MEDIA_ROOT)
+# static() function takes two arguments: the base URL to serve from, and the location of the files; it returns a URL configuration that can be used to serve files in DEBUG mode
