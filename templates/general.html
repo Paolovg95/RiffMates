@@ -9,8 +9,9 @@
 {% block content %}
 
 {% if request.user.is_authenticated %}
-  {{content|safe}}
+  {{ content|safe }}
 {% else %}
-  {{login_content|safe}}
+  <h1>You need to log in first</h1>
+  <p> <a href="/accounts/login/">Log in</a> </p>
 {% endif %}
 {% endblock content %}

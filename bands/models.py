@@ -15,7 +15,10 @@ class Band(models.Model):
     def __str__(self):
         return f"Band={self.id}, Name={self.name}"
 
+# def user_path(instance, filename):
+#     return f"user{instance.owner.id}/{filename}"
 class Venue(models.Model):
+    # owner = models.ForeignKey(User, on_delete=models.CASCADE)
     name = models.CharField(max_length=20)
     description = models.TextField(blank=True)
     picture = models.ImageField(blank=True, null=True)

@@ -5,7 +5,7 @@ from django.core.paginator import Paginator
 from django.http import Http404
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.db.models.signals import post_save
-from django.contrib.auth.signals import user_login_failed
+from bands.forms import VenueForm
 from django.dispatch import receiver
 # Create your views here.
 
@@ -68,24 +68,26 @@ def venues_restricted(user):
         user = user.userprofile
         return user.venue_profiles.all().exists
     except:
-        redirect("/restricted/") # If user.userprofile not exists = Not logged in
-@user_passes_test(venues_restricted, login_url="/restricted/")
+        redirect("/login/")
+
+# If user.userprofile not exists = Not logged in
+@user_passes_test(venues_restricted)
 def venues_restricted(request):
     user_profile = request.user.userprofile
     venues = user_profile.venue_profiles.all()
-    if venues:
-        content = f"""
-            <h1>Venues associated:
-                <br>{venues.first()}
-            </h1>
-
-            <p> <a href="/accounts/logout/">Logout</a> </p>
-        """
-    else:
+    if not venues:
         content = f"""
             <h1>No venues associated to your profile</h1>
 
             <p>Move on</p>
+        """
+    else:
+        content = f"""
+            <h1>Venues associated:
+                <br>{venues.last()}
+            </h1>
+
+            <p> <a href="/accounts/logout/">Logout</a> </p>
         """
     context = {
         'venues': venues,
@@ -97,7 +99,9 @@ def venues_restricted(request):
 def musician_restricted(request, musician_id):
     musician = Musician.objects.get(id=musician_id)
     # request.user is the authenticated user, .userprofile is the reverse relationship to the UserProfile ORM model
+    print(request.user)
     user_profile = request.user.userprofile
+
     allowed = False # True if Auth succeeds
 
     # Check
@@ -132,7 +136,7 @@ def musician_restricted(request, musician_id):
     return render(request, "general.html", data)
 
 # Register this function to be called when a User object emits the post_save signal
-@receiver(post_save, sender=User)
+@receiver(post_save , sender=User)
 def user_post_save(sender, **kwargs):
     # Only take action if the User object is new and not created by a fixture, raw is True if the save is from a fixture being loaded
 
@@ -148,3 +152,33 @@ def user_post_save(sender, **kwargs):
 
 # @receiver(user_login_failed,sender=User)
 # def user_login_failed_view(sender, **kwargs):
+
+@login_required()
+def edit_venues(request, venue_id=0):
+
+    if venue_id != 0:
+        venue = get_object_or_404(Venue, id=venue_id)
+        if not request.user.userprofile.venue_profiles.filter(id=venue_id).exists():
+            raise Http404("Can't edit venues you don't own.")
+
+    if request.method == 'GET': #GET
+        if venue_id == 0:
+            form = VenueForm()
+        else:
+            form = VenueForm(instance=venue)
+    else: #POST
+        # In the "add" case, create a new, empty Venue object to associate with the form
+        if venue_id == 0:
+            form = Venue.objects.create()
+
+        form = VenueForm(request.POST, request.FILES, instance=venue)
+
+        if form.is_valid():
+            venue = form.save()
+            # Add the (possibly new) venue to the user’s venues_controlled relationship. The .add() method handles the case where the relationship already exists.
+            request.user.userprofile.venue_profiles.add(venue)
+            redirect("/restricted_venues/")
+    data = {
+        'form': form
+    }
+    return render(request, 'edit_venue.html', data)

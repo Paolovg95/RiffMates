@@ -40,13 +40,3 @@ def view_news(request):
         ],
     }
     return render(request, "news.html", data)
-def login_required(request):
-    login_content = f"""
-        <h1>You need to log in first</h1>
-
-            <p> <a href="/accounts/login/">Log in</a> </p>
-    """
-    data = {
-        'login_content': login_content,
-    }
-    return render(request, "general.html", data)
