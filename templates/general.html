@@ -10,6 +10,16 @@
 
 {% if request.user.is_authenticated %}
   {{ content|safe }}
+  {% if venues %}
+    <ul>
+      {% for venue in venues %}
+        <li>
+          <a href="{% url 'edit_venue' venue.id %}">{{ venue.name }}</a>
+        </li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+<p><a href="/accounts/logout/">Logout</a> </p>
 {% else %}
   <h1>You need to log in first</h1>
   <p> <a href="/accounts/login/">Log in</a> </p>

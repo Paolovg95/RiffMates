@@ -57,7 +57,15 @@ def get_bands(request):
 
 def get_venues(request):
     venues = Venue.objects.all().order_by("name")
+    for venue in venues:
+        # Mark the venue is "controlled" if the logged in user is
+        # associated with the venue
+        profile = request.user.userprofile
+        venue.owned = \
+            profile.venue_profiles.filter(\
+            id=venue.id).exists()
     data = {
+        'venue_owned': venue.owned,
         'venues': venues
     }
     return render(request, "venues.html", data)
@@ -83,11 +91,7 @@ def venues_restricted(request):
         """
     else:
         content = f"""
-            <h1>Venues associated:
-                <br>{venues.last()}
-            </h1>
-
-            <p> <a href="/accounts/logout/">Logout</a> </p>
+            <h1>Venues associated:</h1>
         """
     context = {
         'venues': venues,

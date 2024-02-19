@@ -7,5 +7,7 @@ urlpatterns = [
     path('musicians', views.get_musicians, name="musicians"),
     path('<str:band_id>', views.get_band, name="band"),
     path('restricted_musician/<int:musician_id>/', views.musician_restricted, name='musician_profiles_restricted'),
-    path('restricted_venues/', views.venues_restricted, name="my_venues_restricted"),
+    path('my_venues/', views.venues_restricted, name="my_venues_restricted"),
+    path('my_venues/edit/<int:venue_id>/', views.edit_venues, name="edit_venue"),
+    path('my_venues/new/', views.edit_venues, name="new_venue"),
 ]

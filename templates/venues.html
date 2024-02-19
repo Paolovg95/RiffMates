@@ -5,10 +5,19 @@
 {% endblock title %}
 
 {% block content %}
-  <div class="m-3">
-    <h1>Venues and Rooms</h1>
+<div class="m-3">
+  <h1>Venues and Rooms</h1>
+    {% if user.is_authenticated %}
+      <button class="btn btn-success" type="submit">
+        <a href="{% url 'new_venue' %}">Add Venue</a>
+      </button>
+    {% endif %}
     {% for venue in venues %}
-      <h3>{{ venue.name }}</h3>
+      {% if venue.owned %}
+        <h5>{{ venue.name }} - <a href="{% url 'edit_venue' venue.id %}">Edit</a></h5>
+      {% else %}
+        <h5>{{ venue.name }}</h5>
+      {% endif %}
       <ol>
         {% for room in venue.room_set.all %}
           <li>
