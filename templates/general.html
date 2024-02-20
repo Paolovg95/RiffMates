@@ -1,4 +1,3 @@
-<!-- RiffMates/templates/general.html -->
 <!-- |safe allows you to write HTML content into the page -->
 {% extends "base.html" %}
 
@@ -7,7 +6,6 @@
 {% endblock %}
 
 {% block content %}
-
 {% if request.user.is_authenticated %}
   {{ content|safe }}
   {% if venues %}
@@ -22,10 +20,12 @@
   {% if musician_profile %}
     <h3>My profile: {{ musician_profile.first_name }}</h3>
     {% if band_mates %}
-      {{ band_mates}}
       <h3>Bands and members profiles</h3>
           {% for mates in band_mates %}
-            <p>{{ mates }}</p>
+            <h4>From: {{ mates.1 }}</h4>
+            {% for mate in mates.0 %}
+              <p>{{ mate.first_name }} {{ mate.last_name }}</p>
+            {% endfor %}
           {% endfor %}
     {% endif %}
   {% endif %}

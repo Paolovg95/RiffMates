@@ -117,8 +117,9 @@ def musicians_restricted(request):
         musician_profiles = set(user_profile.musician_profiles.all())
         if musician_profiles:
             for band in musician.band_set.all(): # Iterate through the bands of user's musician profile.
+                band_name = band.name
                 band_musicians = band.musicians.exclude(id=musician.id) # Append band mates
-                data['band_mates'].append(band_musicians.distinct())
+                data['band_mates'].append((band_musicians, band_name))
     if not allowed:
         raise Http404("Musician profile not found")
     return render(request, "general.html", data)
