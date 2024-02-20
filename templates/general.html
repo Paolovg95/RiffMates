@@ -19,6 +19,16 @@
       {% endfor %}
     </ul>
   {% endif %}
+  {% if musician_profile %}
+    <h3>My profile: {{ musician_profile.first_name }}</h3>
+    {% if band_mates %}
+      {{ band_mates}}
+      <h3>Bands and members profiles</h3>
+          {% for mates in band_mates %}
+            <p>{{ mates }}</p>
+          {% endfor %}
+    {% endif %}
+  {% endif %}
 <p><a href="/accounts/logout/">Logout</a> </p>
 {% else %}
   <h1>You need to log in first</h1>

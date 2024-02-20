@@ -100,43 +100,27 @@ def venues_restricted(request):
     return render(request, "general.html", context)
 
 @login_required
-def musician_restricted(request, musician_id):
-    musician = Musician.objects.get(id=musician_id)
-    # request.user is the authenticated user, .userprofile is the reverse relationship to the UserProfile ORM model
-    print(request.user)
+def musicians_restricted(request):
     user_profile = request.user.userprofile
-
+    musician = Musician.objects.get(userprofile=user_profile)
+    # request.user is the authenticated user, .userprofile is the reverse relationship to the UserProfile ORM model
     allowed = False # True if Auth succeeds
 
-    # Check
-    if user_profile.musician_profiles.filter(id=musician_id).exists():
+    data = {
+        'content': '<h1>Musician Profiles</h1>',
+        'band_mates': [] # This will have all the band mates from every musician's bands
+    }
+    # Check user musician profile
+    if musician:
+        data['musician_profile'] = musician
         allowed = True
-        content = f"""
-            <h1>Your musician profile: {musician.first_name} {musician.last_name}</h1>
-
-            <p> <a href="/accounts/logout/">Logout</a> </p>
-        """
-    else:
         musician_profiles = set(user_profile.musician_profiles.all())
-        for band in musician.band_set.all():
-            band_musicians = set(band.musicians.all())
-            if musician_profiles.intersection(band_musicians):
-                allowed = True
-                content = f"""
-                    <h1>Band member profile: {musician.first_name} {musician.last_name}</h1>
-                    <h2>From {band.name}</h2>
-
-                    <p> <a href="/accounts/logout/">Logout</a> </p>
-                """
-            break
-    # If User is not this musician, check if they're a band-mate
+        if musician_profiles:
+            for band in musician.band_set.all(): # Iterate through the bands of user's musician profile.
+                band_musicians = band.musicians.exclude(id=musician.id) # Append band mates
+                data['band_mates'].append(band_musicians.distinct())
     if not allowed:
         raise Http404("Musician profile not found")
-    data = {
-        'title': 'Musician Restricted',
-        'content': content,
-    }
-
     return render(request, "general.html", data)
 
 # Register this function to be called when a User object emits the post_save signal

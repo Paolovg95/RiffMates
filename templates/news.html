@@ -16,7 +16,7 @@
     <tbody>
         {% for item in news %}
           <tr class="{% cycle 'news_1' 'news_2' %}">
-            <th>{{ item.0}}</th>
+            <th>{{ item.0 }}</th>
             <th>{{ item.1|date:"F tS, l o"}}</th>
           </tr>
         {% endfor %}
