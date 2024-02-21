@@ -17,17 +17,15 @@
       {% endfor %}
     </ul>
   {% endif %}
-  {% if musician_profile %}
-    <h3>My profile: {{ musician_profile.first_name }}</h3>
-    {% if band_mates %}
-      <h3>Bands and members profiles</h3>
-          {% for mates in band_mates %}
-            <h4>From: {{ mates.1 }}</h4>
-            {% for mate in mates.0 %}
-              <p>{{ mate.first_name }} {{ mate.last_name }}</p>
-            {% endfor %}
-          {% endfor %}
-    {% endif %}
+  {% if profiles %}
+    <h3>My profile{{ profiles|pluralize }}</h3>
+    <a href="{% url 'new_musician' %}">Add musician</a>
+    <ul>
+      {% for profile in profiles %}
+        <li><a href="{% url 'edit_musician' profile.id %}">{{ profile.first_name }} {{ profile.last_name }}</a></li>
+      {% endfor %}
+    </ul>
+
   {% endif %}
 <p><a href="/accounts/logout/">Logout</a> </p>
 {% else %}
@@ -35,3 +33,12 @@
   <p> <a href="/accounts/login/">Log in</a> </p>
 {% endif %}
 {% endblock content %}
+<!-- {% if band_mates %}
+<h3>Bands and members profiles</h3>
+{% for mates in band_mates %}
+<h4>From: {{ mates.1 }}</h4>
+{% for mate in mates.0 %}
+<p>{{ mate.first_name }} {{ mate.last_name }}</p>
+{% endfor %}
+{% endfor %}
+{% endif %} -->

@@ -10,6 +10,9 @@
   <!-- <img class="card-img-top" src="..." alt="Card image cap"> -->
   <div class="card-body">
     <h5 class="card-title font-weight-bold">{{musician.first_name}} {{musician.last_name}}</h5>
+    {% if edit_allowed %}
+      <a href="{% url 'edit_musician' musician.id %}">Edit</a>
+    {% endif %}
   </div>
   <ul class="list-group list-group-flush">
     <li class="list-group-item font-weight-bold">Born:

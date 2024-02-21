@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 class Musician(models.Model):
     first_name = models.CharField(max_length=30)
     last_name = models.CharField(max_length=30)
-    birth_date = models.DateField()
+    birth_date = models.DateField(null=True, blank=True)
     def __str__(self):
         return f"Musician (id={self.id}, first_name={self.first_name}, last_name={self.last_name})"
 

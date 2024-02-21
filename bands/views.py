@@ -5,15 +5,20 @@ from django.core.paginator import Paginator
 from django.http import Http404
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.db.models.signals import post_save
-from bands.forms import VenueForm
+from bands.forms import VenueForm, MusicianForm
 from django.dispatch import receiver
 # Create your views here.
 
 def get_musician(request, musician_id):
-    musician = get_object_or_404(Musician, id=musician_id )
+    user_profile = request.user.userprofile
+    musician = get_object_or_404(Musician, id=musician_id)
+    edit_allowed = False
+    if user_profile.musician_profiles.filter(id=musician.id).exists():
+        edit_allowed = True
     data = {
         'musician': musician,
-        'bands': musician.band_set.all()
+        'bands': musician.band_set.all(),
+        'edit_allowed': edit_allowed
     }
     return render(request, "musician.html", data)
 
@@ -102,26 +107,11 @@ def venues_restricted(request):
 @login_required
 def musicians_restricted(request):
     user_profile = request.user.userprofile
-    musician = Musician.objects.get(userprofile=user_profile)
-    # request.user is the authenticated user, .userprofile is the reverse relationship to the UserProfile ORM model
-    allowed = False # True if Auth succeeds
-
+    musicians_profiles = Musician.objects.filter(userprofile=user_profile)
     data = {
         'content': '<h1>Musician Profiles</h1>',
-        'band_mates': [] # This will have all the band mates from every musician's bands
+        'profiles': musicians_profiles
     }
-    # Check user musician profile
-    if musician:
-        data['musician_profile'] = musician
-        allowed = True
-        musician_profiles = set(user_profile.musician_profiles.all())
-        if musician_profiles:
-            for band in musician.band_set.all(): # Iterate through the bands of user's musician profile.
-                band_name = band.name
-                band_musicians = band.musicians.exclude(id=musician.id) # Append band mates
-                data['band_mates'].append((band_musicians, band_name))
-    if not allowed:
-        raise Http404("Musician profile not found")
     return render(request, "general.html", data)
 
 # Register this function to be called when a User object emits the post_save signal
@@ -171,3 +161,35 @@ def edit_venues(request, venue_id=0):
         'form': form
     }
     return render(request, 'edit_venue.html', data)
+
+# RiffMates/bands/views.py
+@login_required
+def edit_musician(request, musician_id=0):
+    if musician_id != 0:
+        musician = get_object_or_404(Musician, id=musician_id)
+
+    if request.method == 'GET':
+        if musician_id == 0:
+            form = MusicianForm()
+        else:
+            form = MusicianForm(instance=musician)
+    else: # POST
+        if musician_id == 0:
+            form = MusicianForm(request.POST)
+            musician = form.save()
+            request.user.userprofile.musician_profiles.add(musician)
+            musician.save()
+            redirect(f"/bands/musician/{musician.id}/")
+
+
+        form = MusicianForm(request.POST, instance=musician)
+
+        if form.is_valid():
+            musician = form.save()
+            request.user.userprofile.musician_profiles.add(musician)
+            musician.save()
+            redirect(f"/bands/musician/{musician.id}/")
+    data = {
+        'form': form
+    }
+    return render(request, 'edit_musician.html', data)
