@@ -6,6 +6,9 @@ class Musician(models.Model):
     first_name = models.CharField(max_length=30)
     last_name = models.CharField(max_length=30)
     birth_date = models.DateField(null=True, blank=True)
+    picture = models.ImageField(blank=True, null=True)
+
+    # profile_picture = models.ImageField(blank=True, null=True)
     def __str__(self):
         return f"Musician (id={self.id}, first_name={self.first_name}, last_name={self.last_name})"
 

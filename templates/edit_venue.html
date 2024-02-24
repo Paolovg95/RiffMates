@@ -3,7 +3,7 @@
 {% block content %}
 <h1>Edit Venue</h1>
 
-<form class="col-lg-6 offset-lg-3" method="post">
+<form enctype="multipart/form-data" class="col-lg-6 offset-lg-3" method="post">
   {% csrf_token %}
   {% for field in form %}
   <div class="col-md-6 m-4">

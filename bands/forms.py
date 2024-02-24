@@ -3,4 +3,4 @@ from bands.models import Venue, Musician
 
 VenueForm = forms.modelform_factory(Venue,
     fields=["name", "description", "picture"])
-MusicianForm = forms.modelform_factory(Musician, fields=["first_name", "last_name", "birth_date"])
+MusicianForm = forms.modelform_factory(Musician, fields=["first_name", "last_name", "birth_date", "picture"])

@@ -8,9 +8,7 @@
 <div class="m-3">
   <h1>Venues and Rooms</h1>
     {% if user.is_authenticated %}
-      <button class="btn btn-success" type="submit">
         <a href="{% url 'new_venue' %}">Add Venue</a>
-      </button>
     {% endif %}
     {% for venue in venues %}
       {% if venue.owned %}

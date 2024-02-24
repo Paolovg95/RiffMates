@@ -10,11 +10,12 @@ from django.dispatch import receiver
 # Create your views here.
 
 def get_musician(request, musician_id):
-    user_profile = request.user.userprofile
     musician = get_object_or_404(Musician, id=musician_id)
     edit_allowed = False
-    if user_profile.musician_profiles.filter(id=musician.id).exists():
-        edit_allowed = True
+    if request.user.is_authenticated:
+        user_profile = request.user.userprofile
+        if user_profile.musician_profiles.filter(id=musician.id).exists():
+            edit_allowed = True
     data = {
         'musician': musician,
         'bands': musician.band_set.all(),
@@ -62,17 +63,18 @@ def get_bands(request):
 
 def get_venues(request):
     venues = Venue.objects.all().order_by("name")
+    data = {
+        'venues': venues
+    }
     for venue in venues:
         # Mark the venue is "controlled" if the logged in user is
         # associated with the venue
-        profile = request.user.userprofile
-        venue.owned = \
-            profile.venue_profiles.filter(\
-            id=venue.id).exists()
-    data = {
-        'venue_owned': venue.owned,
-        'venues': venues
-    }
+        if request.user.is_authenticated:
+            profile = request.user.userprofile
+            venue.owned = \
+                profile.venue_profiles.filter(\
+                id=venue.id).exists()
+            data['venue_owned'] = venue.owned
     return render(request, "venues.html", data)
 
 # The musician_restricted view takes a Musician object ID as a parameter and checks if the authenticated user is either that musician or one of their bandmates.
@@ -132,7 +134,7 @@ def user_post_save(sender, **kwargs):
 # @receiver(user_login_failed,sender=User)
 # def user_login_failed_view(sender, **kwargs):
 
-@login_required()
+@login_required
 def edit_venues(request, venue_id=0):
 
     if venue_id != 0:
@@ -175,20 +177,16 @@ def edit_musician(request, musician_id=0):
             form = MusicianForm(instance=musician)
     else: # POST
         if musician_id == 0:
-            form = MusicianForm(request.POST)
-            musician = form.save()
-            request.user.userprofile.musician_profiles.add(musician)
-            musician.save()
-            redirect(f"/bands/musician/{musician.id}/")
+            musician = Musician.objects.create()
 
 
-        form = MusicianForm(request.POST, instance=musician)
+        form = MusicianForm(request.POST, request.FILES, instance=musician)
 
         if form.is_valid():
             musician = form.save()
             request.user.userprofile.musician_profiles.add(musician)
             musician.save()
-            redirect(f"/bands/musician/{musician.id}/")
+            return redirect(f"/bands/musician/{musician.id}/")
     data = {
         'form': form
     }
