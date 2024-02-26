@@ -44,11 +44,15 @@ def comment(request):
 # RiffMates/content/views.py
 
 def list_ads(request):
+    allowed = False
+    if request.user.is_superuser or request.user.is_staff:
+        allowed = True
     data = {
         'seeking_musician':SeekingAd.objects.filter(
             seeking=SeekingChoice.MUSICIAN),
         'seeking_band':SeekingAd.objects.filter(
             seeking=SeekingChoice.BAND),
+        'allowed': allowed
     }
     return render(request, "list_ads.html", data)
 
