@@ -2,6 +2,7 @@
 from django.core.management.base import BaseCommand, CommandError
 from bands.models import Musician
 from datetime import datetime
+
 class Command(BaseCommand):
     help = "Lists registered musicians" # Provide a help string for the --help command-line flag
 
@@ -19,6 +20,7 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         musicians = Musician.objects.all()
         if options["last_name"]:
+            # self.stdout.write(f"{options}")
             musicians = Musician.objects.filter(first_name__gte=options["last_name"])
         if options["first_name"]:
             musicians = Musician.objects.filter(first_name__gte=options["first_name"])
