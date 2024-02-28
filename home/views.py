@@ -7,6 +7,10 @@ from datetime import datetime
 # Render template w/ context via template
 def home(request):
     return render(request, "base.html", {})
+
+def tables(request):
+    return render(request, "tables.html", {})
+
 def view_credits(request):
 
     credit_context = {

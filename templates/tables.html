@@ -1,0 +1,112 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>Sample table</h1>
+  <script type="text/javascript">
+    const table = new DataTable('#example', {
+      paging: false,
+      scrollY: '200px'
+    });
+    document.querySelectorAll('a.toggle-vis').forEach((el) => {
+      el.addEventListener('click', function (e) {
+        e.preventDefault();
+
+        let columnIdx = e.target.getAttribute('data-column');
+        let column = table.column(columnIdx);
+
+        // Toggle the visibility
+        column.visible(!column.visible());
+      });
+    });
+  </script>
+  <div>
+    Toggle column:
+    <a class="toggle-vis" data-column="2">FULLCARE</a> - <a class="toggle-vis" data-column="3">BRINGCO</a> - <a
+      class="toggle-vis" data-column="4">DISTGLORIA</a>
+  </div>
+  <table id="example" class="table table-striped text-center table-hover display m-4" style="width:100%">
+    <thead>
+      <tr>
+        <th>Producto</th>
+        <th>UM</th>
+        <th>Cantidad</th>
+        <th>FULLCARE</th>
+        <th>BRINGCO</th>
+        <th>DISTGLORIA</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Silla Blanca</td>
+        <td>Unidad</td>
+        <td>5</td>
+        <td>$320,800<input type="checkbox"></input></td>
+        <td>$120,800<input type="checkbox"></input></td>
+        <td>$170,750<input type="checkbox"></input></td>
+      </tr>
+      <tr>
+        <td>Aire Acoindicionado</td>
+        <td>Unidad</td>
+        <td>3</td>
+        <td>$320,800<input type="checkbox"></input></td>
+        <td>$120,800<input type="checkbox"></input></td>
+        <td>$170,750<input type="checkbox"></input></td>
+      </tr>
+      <tr>
+        <td>Paquete Laminas A4 X10</td>
+        <td>Paquete</td>
+        <td>50</td>
+        <td>$10,750<input type="checkbox"></input></td>
+        <td>$10,800<input type="checkbox"></input></td>
+        <td>$10,850<input type="checkbox"></input></td>
+      </tr>
+      <tr>
+        <td>Escritorio L</td>
+        <td>Unidad</td>
+        <td>5</td>
+        <td>$ff,800<input type="checkbox"></input></td>
+        <td>$120,800<input type="checkbox"></input></td>
+        <td>$170,750<input type="checkbox"></input></td>
+      </tr>
+      <tr>
+        <td>Lampara Escritorio</td>
+        <td>Unidad</td>
+        <td>5</td>
+        <td>$320,800<input type="checkbox"></input></td>
+        <td>$120,800<input type="checkbox"></input></td>
+        <td>❌</td>
+      </tr>
+      <tr>
+        <td>Monitor LG 13''</td>
+        <td>Unidad</td>
+        <td>3</td>
+        <td>$325,750<input type="checkbox"></input></td>
+        <td>❌</td>
+        <td>❌</td>
+      </tr>
+      <tr>
+        <td>Paquete Laminas Oficio X20</td>
+        <td>Paquete</td>
+        <td>60</td>
+        <td>$120,800<input type="checkbox"></input></td>
+        <td>❌</td>
+        <td>❌</td>
+      </tr>
+      <tr>
+    </tbody>
+    <tfoot>
+      <tr>
+        <th>Total Cotizado</th>
+        <th>-</th>
+        <th>-</th>
+        <th>$555,0000</th>
+        <th>$355,000</th>
+        <th>$90,000</th>
+      </tr>
+    </tfoot>
+  </table>
+
+  </body>
+
+  </html>
+{% endblock content %}
