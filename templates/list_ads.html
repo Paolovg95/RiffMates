@@ -26,8 +26,8 @@
     {{ad.date}} &mdash; <strong>{{ad.band.name}}</strong>
     <br />
     <i>{{ad.content}}</i>
-    {% if ad.owner == request.user %}
-    <a href="{% url 'edit_ad' ad.id %}">Edit</a>
+    {% if allowed or ad.owner == request.user %}
+      <a href="{% url 'edit_ad' ad.id %}">Edit</a>
     {% endif %}
   </p>
   {% empty %}
