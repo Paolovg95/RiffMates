@@ -34,15 +34,14 @@ def get_musicians(request):
     elif page_num > paginator.num_pages:
         page_num = paginator.num_pages
     page = paginator.page(page_num) # Returns a Page object with the given page_num based index
-    musicians_bands = {}
-    for musician in musicians:
-        musicians_bands[musician.first_name + " " + musician.last_name] = len(musician.band_set.all())
-    # Sort musicians in ascending order, result is a List of Tuples
-    sorted_musicians_bands = sorted(musicians_bands.items(), key=lambda x:x[1], reverse=True)
+
+    # for musician in musicians:
+    #     musicians_bands[musician.first_name + " " + musician.last_name] = len(musician.band_set.all())
+    # # Sort musicians in ascending order, result is a List of Tuples
+    # sorted_musicians_bands = sorted(musicians_bands.items(), key=lambda x:x[1], reverse=True)
     data = {
         'musicians': page.object_list, # list of objects in as 'musicians'
         'page': page, # page object,
-        'sorted_musicians_bands': sorted_musicians_bands
     }
     return render(request, "musicians.html", data)
 
@@ -150,7 +149,7 @@ def edit_venues(request, venue_id=0):
     else: #POST
         # In the "add" case, create a new, empty Venue object to associate with the form
         if venue_id == 0:
-            form = Venue.objects.create()
+            venue = Venue.objects.create()
 
         form = VenueForm(request.POST, request.FILES, instance=venue)
 

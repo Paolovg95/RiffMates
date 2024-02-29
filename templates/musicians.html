@@ -24,38 +24,29 @@
     <ul class="pagination">
       {% if page.has_other_pages %}
         {% if page.has_previous %}
-
-          <li class="page-item"><a class="page-link" href="{% url 'musicians' %}?page={{page.previous_page_number}}">{{ page.previous_page_number }}</a></li>
-          <li class="page-item"><a class="page-link" href="#">{{ page.number }}</a></li>
+          <li class="page-item"><a class="page-link" href="{% url 'musicians' %}?page={{page.previous_page_number}}">&laquo;</a></li>
+          {% else %}
+            <li class="d-none"><span>&laquo;</span></li>
+          {% endif %}
         {% endif %}
-      {% endif %}
 
-      {% if page.has_next %}
-        {% if page.next_page_number == page.paginator.num_pages %}
-            <li class="page-item">
-              <a class="page-link" href="{% url 'musicians' %}?page={{page.next_page_number}}">{{ page.next_page_number }}</a>
-            </li>
-        {% else %}
-            <li class="page-item">
-              <a class="page-link" href="#">{{ page.number }}</a>
-            </li>
-            <li class="page-item">
-              <a class="page-link" href="{% url 'musicians' %}?page={{page.next_page_number}}">{{ page.next_page_number }}</a>
-            </li>
-            <li class="page-item">
-              <a class="page-link" href="{% url 'musicians' %}?page={{page.paginator.num_pages }}">{{ page.paginator.num_pages }}</a>
-            </li>
-        {% endif %}
-      {% endif %}
+        {% for i in page.paginator.page_range %}
+          {% if i == page.number %}
+            <li class="page-item active"><a class="page-link" href="#">{{ page.number }}</a></li>
+          {% else %}
+            <li class="page-item"><a class="page-link" href="{% url 'musicians' %}?page={{ i }}">{{ i }}</a></li>
+            {% endif %}
+            {% endfor %}
+
+          {% if page.has_next %}
+            <li class="page-item"><a class="page-link" href="{% url 'musicians' %}?page={{ page.next_page_number }}">&raquo;</a></li>
+          {% else %}
+            <li class="d-none"><span>&raquo;</span></li>
+          {% endif %}
+
     </ul>
   </nav>
 </div>
-<p>Sorted by number of bands</p>
-<ul>
-  {% for musician_band in sorted_musicians_bands %}
-    <li>{{musician_band.0 }}: {{ musician_band.1 }}</li>
-  {% endfor %}
-</ul>
 
 
 {% endblock content %}
