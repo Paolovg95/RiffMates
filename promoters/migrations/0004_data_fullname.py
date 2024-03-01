@@ -2,12 +2,32 @@
 
 from django.db import migrations
 
+# This function gets called by RunPython when migrating forwards
+def de_westernize_names(apps, schema_editor):
+    # The apps.get_model() method returns a Model class whose state is the same as the current migration
+    Promoter = apps.get_model("promoters", "Promoter")
+    for promoter in Promoter.objects.all():
+        promoter.full_name = f"{promoter.first_name} {promoter.last_name}"
+        promoter.common_name = promoter.first_name
+        promoter.save()
+
+def re_westernize_names(apps, schema_editor):
+    Promoter = apps.get_model("promoters", "Promoter")
+    for promoter in Promoter.objects.all():
+        promoter.first_name = promoter.common_name
+        length = len(promoter.first_name)
+        promoter.last_name = promoter.full_name[length:]
+    promoter.save()
 
 class Migration(migrations.Migration):
 
     dependencies = [
         ('promoters', '0003_promoter_common_name_promoter_full_name'),
     ]
-
+    # RunPython is an operation that takes two function references: the first gets called when migrating forward, and the second when migrating backward.
     operations = [
+        migrations.RunPython(
+            de_westernize_names,
+            re_westernize_names
+        )
     ]
