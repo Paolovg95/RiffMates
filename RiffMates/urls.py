@@ -20,7 +20,15 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
 from home import views as home_views
+from ninja import NinjaAPI
+from home.api import router as home_router
+from promoters.api import router as promoters_router
 from bands.views import get_venues
+
+
+api = NinjaAPI(version="1.0")
+api.add_router("/home/", home_router)
+api.add_router("/promoters/", promoters_router)
 
 urlpatterns = [
     path('', home_views.home, name="home"),
@@ -32,8 +40,11 @@ urlpatterns = [
     path('about/', home_views.view_about, name='about'),
     path('news/', home_views.view_news, name="news"),
     path('venues/', get_venues, name="venues"),
-    path('accounts/', include('django.contrib.auth.urls'))
+    path('accounts/', include('django.contrib.auth.urls')),
+    # Home API
+    path("api/v1/", api.urls),
 ]
+
 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL,
