@@ -23,12 +23,14 @@ from home import views as home_views
 from ninja import NinjaAPI
 from home.api import router as home_router
 from promoters.api import router as promoters_router
+from bands.api import router as venues_router
 from bands.views import get_venues
 
 
-api = NinjaAPI(version="1.0")
+api = NinjaAPI(version="1.0.0")
 api.add_router("/home/", home_router)
 api.add_router("/promoters/", promoters_router)
+api.add_router("/bands/", venues_router)
 
 urlpatterns = [
     path('', home_views.home, name="home"),
