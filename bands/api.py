@@ -2,12 +2,15 @@
 from django.shortcuts import get_object_or_404
 from django.urls import reverse
 from django.utils.text import slugify
-
-from ninja import Router, ModelSchema
+from typing import Optional
+from ninja import Router, ModelSchema, Field, FilterSchema, Query
 
 from bands.models import Venue
 
 router = Router()
+
+class VenueFilter(FilterSchema):
+    name: Optional[str] = None
 
 class VenueOut(ModelSchema):
     slug: str
@@ -29,10 +32,28 @@ class VenueOut(ModelSchema):
         url = reverse("api-1.0.0:fetch_url", args=[obj.id, ])
         return url
 
+
+# The url_name argument to a Ninja decorator declares a name for the endpoint that can be looked up with a call to reverse()
+
+# GET API Venue id
 @router.get("/venue/{venue_id}/",
     response=VenueOut,
     url_name="fetch_url")
-# The url_name argument to a Ninja decorator declares a name for the endpoint that can be looked up with a call to reverse()
 def fetch_venue(request, venue_id):
     venue = get_object_or_404(Venue, id=venue_id)
     return venue
+
+# GET API Venue name
+#Support a query parameter called "name" Ex: api/v1/bands/venues/?name=CBGB
+# @router.get("/venues/", response=list[VenueOut])
+# def fetch_venues(request, name=None):
+#     venues = Venue.objects.all()
+#     if name != None:
+#         venues = venues.filter(name__istartswith=name)
+#     return venues
+
+@router.get("/venues/", response=list[VenueOut])
+def fetch_name(request, filters: VenueFilter = Query(...)):
+    venues = Venue.objects.all()
+    venues = filters.filter(venues)
+    return venues
