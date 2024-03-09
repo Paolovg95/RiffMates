@@ -44,7 +44,7 @@ urlpatterns = [
     path('venues/', get_venues, name="venues"),
     path('accounts/', include('django.contrib.auth.urls')),
     # Home API
-    path("api/v1/", api.urls),
+    path("api/v1/", api.urls), # Add the API endpoints as URLs
 ]
 
 

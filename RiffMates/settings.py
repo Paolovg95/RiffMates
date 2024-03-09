@@ -134,3 +134,4 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 # RiffMates/RiffMates/settings.py
 MEDIA_ROOT = BASE_DIR.parent / 'outside/RiffMates/uploads'
 MEDIA_URL = '/media/'
+API_KEY_SETTINGS = 'notsecure'
