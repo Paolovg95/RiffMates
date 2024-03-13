@@ -26,7 +26,6 @@ from promoters.api import router as promoters_router
 from bands.api import router as venues_router
 from bands.views import get_venues
 
-
 api = NinjaAPI(version="1.0.0")
 api.add_router("/home/", home_router)
 api.add_router("/promoters/", promoters_router)
@@ -37,6 +36,7 @@ urlpatterns = [
     path('tables/', home_views.tables, name="tables"),
     path('bands/',include("bands.urls")),
     path('content/',include("content.urls")),
+    path('promoters/', include("promoters.urls")),
     path('admin/', admin.site.urls),
     path('credits/', home_views.view_credits, name="credits"),
     path('about/', home_views.view_about, name='about'),

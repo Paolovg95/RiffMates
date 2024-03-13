@@ -1,0 +1,10 @@
+<!-- RiffMates/templates/partials/promoters.html -->
+<ul>
+  {% for promoter in promoters %}
+  <li>
+    {{promoter.full_name}}
+  </li>
+  {% empty %}
+  <li> <i>No promoters in the database</i> </li>
+  {% endfor %}
+</ul>
