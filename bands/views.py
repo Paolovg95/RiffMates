@@ -1,4 +1,5 @@
 from django.shortcuts import render, get_object_or_404, redirect
+from django.db.models import Q
 from bands.models import Musician, Band, Venue, UserProfile
 from django.contrib.auth.models import User
 from django.core.paginator import Paginator
@@ -7,6 +8,7 @@ from django.contrib.auth.decorators import login_required, user_passes_test
 from django.db.models.signals import post_save
 from bands.forms import VenueForm, MusicianForm
 from django.dispatch import receiver
+import urllib.parse
 # Create your views here.
 
 def get_musician(request, musician_id):
@@ -190,3 +192,26 @@ def edit_musician(request, musician_id=0):
         'form': form
     }
     return render(request, 'edit_musician.html', data)
+
+def search_musicians(request):
+    search_text = request.GET.get("search_text", "")
+    search_text = urllib.parse.unquote(search_text)
+    search_text = search_text.strip()
+    # strip the spaces and creates a list of the input
+
+    musicians = []
+
+    if search_text:
+        parts = search_text.split()
+        # First word Search if matches last name or first name
+        q = Q(first_name__istartswith=parts[0]) | \
+            Q(last_name__istartswith=parts[0])
+        for part in parts[1:]: # Loop through subsequent search terms
+            q |= Q(first_name__istartswith=part) | \
+                Q(last_name__istartswith=part)
+        musicians = Musician.objects.filter(q)
+    data = {
+        "search_text": search_text,
+        "musicians": musicians
+    }
+    return render(request, "search_musicians.html", data)

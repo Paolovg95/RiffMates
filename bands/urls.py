@@ -13,4 +13,5 @@ urlpatterns = [
     path('my_profiles/edit/<int:musician_id>/', views.edit_musician, name="edit_musician"),
     path('my_profiles/new/', views.edit_musician, name="new_musician"),
     path('my_venues/new/', views.edit_venues, name="new_venue"),
+    path('search_musicians/', views.search_musicians, name="search_musicians")
 ]

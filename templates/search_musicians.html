@@ -1,0 +1,11 @@
+<!-- RiffMates/templates/musician.html -->
+{% extends "base.html" %}
+
+{% block title %}
+{{block.super}}: Search Musician
+{% endblock %}
+
+{% block content %}
+{{ search_text }}
+{{ musicians }}
+{% endblock content %}
