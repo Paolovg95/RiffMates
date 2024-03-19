@@ -1,0 +1,24 @@
+<!-- RiffMates/templates/musician.html -->
+
+<div class="card" style="width: 18rem;">
+  <!-- <img class="card-img-top" src="..." alt="Card image cap"> -->
+  <div class="card-body">
+    <h5 class="card-title font-weight-bold">{{musician.first_name}} {{musician.last_name}}</h5>
+    {% if edit_allowed %}
+    <a href="{% url 'edit_musician' musician.id %}">Edit</a>
+    {% endif %}
+  </div>
+  <ul class="list-group list-group-flush">
+    <li class="list-group-item font-weight-bold">Born:
+      <span class="font-weight-light">{{musician.birth_date}}</span>
+    </li>
+    <li class="list-group-item font-weight-bold">Bands:</li>
+  </ul>
+  <div class="card-body">
+    <p>This musician has {{ bands|length }} band{{ bands|pluralize }}</p>
+    {% for band in bands %}
+    <a href="{% url 'band' band.id %}" class="card-link">{{ band.name }}</a>
+    {% endfor %}
+  </div>
+</div>
+<button type="button" onClick="javascript:history.go(-1)" class="btn btn-link">Go back</button>

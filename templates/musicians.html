@@ -7,20 +7,20 @@
 
 {% block content %}
 <div class="p-4">
-  <form action="{% url 'search_musicians' %}">
-    <input type="text" name="search_text">
-    <input type="submit">
-  </form>
+    <input
+    placeholder="Search for musicians"
+    name="search_text"
+    type="text"
+    value="{{search_text}}"
+    hx-get="{% url 'search_musicians' %}"
+    hx-trigger="keyup changed delay:500ms"
+    hx-target="#results"
+    hx-push-url="true">
+    <!-- Turning on hx-push-url causes the URL’s search_text query parameter to be updated with the contents of the input box -->
   <h1>Musicians List</h1>
-  <ul>
-      {% for musician in musicians %}
-        <div class="mt-4">
-          <li>
-            <a href="{% url 'musician' musician.id %}">{{ musician.first_name }} {{ musician.last_name }}</a>
-          </li>
-        </div>
-      {% endfor %}
-  </ul>
+  <div class="results mt-4" id="results">
+    {% include 'partials/musicians_results.html' %}
+  </div>
 </div>
 
 <div class="m-4">

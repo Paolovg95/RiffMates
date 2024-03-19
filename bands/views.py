@@ -2,12 +2,14 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.db.models import Q
 from bands.models import Musician, Band, Venue, UserProfile
 from django.contrib.auth.models import User
+from bands.utils import get_items_per_page, get_page_num
 from django.core.paginator import Paginator
 from django.http import Http404
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.db.models.signals import post_save
 from bands.forms import VenueForm, MusicianForm
 from django.dispatch import receiver
+from time import sleep
 import urllib.parse
 # Create your views here.
 
@@ -23,28 +25,22 @@ def get_musician(request, musician_id):
         'bands': musician.band_set.all(),
         'edit_allowed': edit_allowed
     }
+    if request.htmx:
+        return render(request, "partials/musician_detail.html", data)
     return render(request, "musician.html", data)
 
 def get_musicians(request):
-    musicians = Musician.objects.all().order_by("last_name")
-    paginator = Paginator(musicians, 3)
-    # Fetch the page key from the GET dictionary, defaulting to 1 if the key does not exist
-    page_num = request.GET.get('page', 1)
-    page_num  = int(page_num) # URLs are text, convert any value to an integer
-    if page_num < 1: # Min value for 'page' = 1
-        page_num = 1
-    elif page_num > paginator.num_pages:
-        page_num = paginator.num_pages
-    page = paginator.page(page_num) # Returns a Page object with the given page_num based index
+    all_musicians = Musician.objects.all().order_by("last_name")
+    items_per_page = get_items_per_page(request)
+    paginator = Paginator(all_musicians, items_per_page)
+    page_num = get_page_num(request, paginator)
+    page = paginator.page(page_num)
 
-    # for musician in musicians:
-    #     musicians_bands[musician.first_name + " " + musician.last_name] = len(musician.band_set.all())
-    # # Sort musicians in ascending order, result is a List of Tuples
-    # sorted_musicians_bands = sorted(musicians_bands.items(), key=lambda x:x[1], reverse=True)
     data = {
-        'musicians': page.object_list, # list of objects in as 'musicians'
-        'page': page, # page object,
+        "musicians": page.object_list,
+        "page": page,
     }
+
     return render(request, "musicians.html", data)
 
 def get_band(request, band_id):
@@ -197,8 +193,6 @@ def search_musicians(request):
     search_text = request.GET.get("search_text", "")
     search_text = urllib.parse.unquote(search_text)
     search_text = search_text.strip()
-    # strip the spaces and creates a list of the input
-
     musicians = []
 
     if search_text:
@@ -210,8 +204,20 @@ def search_musicians(request):
             q |= Q(first_name__istartswith=part) | \
                 Q(last_name__istartswith=part)
         musicians = Musician.objects.filter(q)
+
+    items_per_page = get_items_per_page(request)
+    paginator = Paginator(musicians, items_per_page) # Create a Paginator using the query, limiting 10 objects per page
+    page_num = get_page_num(request, paginator) # Fetch the page key from the GET dictionary, defaulting to 1 if the key does not exist
+    print(page_num)
+    page = paginator.page(page_num) # Fetch the page object containing the subset of items
+
     data = {
         "search_text": search_text,
-        "musicians": musicians
+        "musicians": page.object_list, # To keep the template code easy to read, pass the list of objects in as musicians
+        "has_more": page.has_next(), # True if there is more data
+        "next_page": page_num + 1
     }
-    return render(request, "search_musicians.html", data)
+    if request.htmx:
+        sleep(2)
+        return render(request, "partials/musicians_results.html", data)
+    return render(request, "musicians.html", data)

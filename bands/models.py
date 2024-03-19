@@ -1,4 +1,8 @@
 from django.db import models
+from django.db.models.signals import pre_save, post_save
+from django.utils.text import slugify
+from django.urls import reverse
+from bands.utils import slugify_musician
 from django.contrib.auth.models import User
 # Create your models here.
 
@@ -6,11 +10,25 @@ class Musician(models.Model):
     first_name = models.CharField(max_length=30)
     last_name = models.CharField(max_length=30)
     birth_date = models.DateField(null=True, blank=True)
+    slug = models.SlugField(unique=True, blank=True, null=True)
     picture = models.ImageField(blank=True, null=True)
 
     # profile_picture = models.ImageField(blank=True, null=True)
+    def save(self, *args, **kwargs):
+      super().save(*args, **kwargs)
     def __str__(self):
         return f"Musician (id={self.id}, first_name={self.first_name}, last_name={self.last_name})"
+
+def musician_pre_save(instance, **kwargs):
+    slug = slugify_musician(instance)
+    if instance.slug is None or slug != instance.slug:
+        instance.slug = slug
+pre_save.connect(musician_pre_save, sender=Musician)
+
+def musician_post_save(created, instance, **kwargs):
+    if created:
+      instance.slug = slugify_musician(instance, save=True)
+post_save.connect(musician_post_save, sender=Musician)
 
 class Band(models.Model):
     name = models.CharField(max_length=100)
