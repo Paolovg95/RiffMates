@@ -13,12 +13,12 @@ from time import sleep
 import urllib.parse
 # Create your views here.
 
-def get_musician(request, musician_id):
-    musician = get_object_or_404(Musician, id=musician_id)
+def get_musician(request, musician_slug):
+    musician = get_object_or_404(Musician, slug=musician_slug)
     edit_allowed = False
     if request.user.is_authenticated:
         user_profile = request.user.userprofile
-        if user_profile.musician_profiles.filter(id=musician.id).exists():
+        if user_profile.musician_profiles.filter(slug=musician.slug).exists():
             edit_allowed = True
     data = {
         'musician': musician,

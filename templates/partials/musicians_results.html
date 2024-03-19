@@ -1,7 +1,7 @@
 <!-- RiffMates/templates/partials/musician_results.html -->
 <ul>
   {% for musician in musicians %}
-  <li> <a href="" hx-get="{% url 'musician' musician.id %}" hx-target="#results">
+  <li> <a href="{% url 'musician' musician.slug %}" hx-get="{% url 'musician' musician.slug %}" hx-target="#results">
       {{musician.first_name}} {{ musician.last_name }}
     </a> </li>
   {% empty %}

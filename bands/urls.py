@@ -3,7 +3,7 @@ from bands import views
 
 urlpatterns = [
     path('', views.get_bands, name="bands"),
-    path('musician/<slug:slug>/', views.get_musician, name="musician"),
+    path('musician/<slug:musician_slug>/', views.get_musician, name="musician"),
     path('musicians', views.get_musicians, name="musicians"),
     path('venues', views.get_venues, name="venues"),
     path('<str:band_id>', views.get_band, name="band"),
